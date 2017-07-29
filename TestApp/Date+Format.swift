@@ -8,19 +8,6 @@
 
 import Foundation
 
-extension String {
-    func toDate() -> Date? {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMM dd, yyyy, hh:mm:ss a"
-        dateFormatter.timeZone = NSTimeZone(name: "UTC") as TimeZone!
-        
-        if let date = dateFormatter.date(from: self) {
-            return date
-        }
-        return nil
-    }
-}
-
 extension Date {
     func toString() -> String {
         let dateFormatter = DateFormatter()

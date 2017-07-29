@@ -8,17 +8,32 @@
 
 import UIKit
 
-class MessagePostCell: UITableViewCell {
+class MessagePostCell: BaseCell {
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
+    @IBOutlet weak var avaHolderImageView: UIImageView!
     
+    @IBOutlet weak var avatarImageView: UIImageView!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var messageLabel: UILabel!
+    @IBOutlet weak var commentsCountLabel: UILabel!
+    
+    
+    
+    override func prepareForReuse() {
+        titleLabel.text = ""
+        commentsCountLabel.text = ""
+        dateLabel.text = ""
+    }
+}
+
+extension MessagePostCell: PostCellProtocol {
+    
+    public func configureCell(withPost post: Post) {
+        titleLabel.text = post.userName
+        commentsCountLabel.text = "💬 \(post.commentsCount)"
+        dateLabel.text = post.dateCreatedString
+//        self.avatarImageView.loadImage(withUrl: post.imageURL)
+        self.avatarImageView.image = post.remoteImage?.image
+    }
 }

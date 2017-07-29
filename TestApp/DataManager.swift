@@ -7,3 +7,18 @@
 //
 
 import Foundation
+
+class DataManager {
+    static func retrieveData() -> [Post] {
+        return DataManager.loadPosts("Data", in: Bundle.main)
+    }
+    
+    static func loadPosts(_ plistName: String, in bundle: Bundle) -> [Post] {
+        let path = bundle.path(forResource: plistName, ofType: "plist")!
+        let array = NSArray(contentsOfFile: path) as! [[String:Any]]
+        return Post.array(dictArray: array)
+    }
+    
+    
+    
+}

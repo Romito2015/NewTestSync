@@ -9,17 +9,29 @@
 import UIKit
 
 class FeedVC: UIViewController {
+    
+    var dataSource: [Post] = []
+    let pendingOperations = PendingOperations()
+    
 
+    @IBOutlet weak var feedTableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.dataSource = DataManager.retrieveData()
+        self.setupTableView()
 
         // Do any additional setup after loading the view.
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    func setupTableView() {
+        self.feedTableView.estimatedRowHeight = 44
+        self.feedTableView.rowHeight = UITableViewAutomaticDimension
+        
+        self.feedTableView.register(MessagePostCell.nib, forCellReuseIdentifier: MessagePostCell.identifier)
+        self.feedTableView.register(PhotoPostCell.nib, forCellReuseIdentifier: PhotoPostCell.identifier)
     }
+
+    
     
 
     /*
@@ -33,3 +45,113 @@ class FeedVC: UIViewController {
     */
 
 }
+
+extension FeedVC: UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return dataSource.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let post = dataSource[indexPath.row] 
+        switch post.type {
+        case .messagePost:
+            return self.messagePostCell(withPost: post, at: indexPath)
+        case .photoPost:
+            return self.photoPostCell(withPost: post, at: indexPath)
+        }
+    }
+    
+    
+    
+    func messagePostCell(withPost post: Post, at indexPath: IndexPath) -> MessagePostCell {
+        
+        if let cell = feedTableView.dequeueReusableCell(withIdentifier: MessagePostCell.identifier,                                                                         for: indexPath) as? MessagePostCell{
+            return cell
+        }
+        return MessagePostCell()
+    }
+    
+    func photoPostCell(withPost post: Post, at indexPath: IndexPath) -> PhotoPostCell {
+        
+        if let cell = feedTableView.dequeueReusableCell(withIdentifier: PhotoPostCell.identifier, for: indexPath) as? PhotoPostCell{
+            return cell
+        }
+        return PhotoPostCell()
+    }
+}
+
+extension FeedVC: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let post = self.dataSource[indexPath.row]
+        if let cell = cell as? PostCellProtocol {
+            cell.configureCell(withPost: post)
+            if (!tableView.isDragging && !tableView.isDecelerating) {
+                guard let remoteImage = post.remoteImage else { return }
+                self.startDownloadForImage(remoteImage: remoteImage, indexPath: indexPath)
+            }
+        }
+        
+    }
+    
+     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        //1
+        suspendAllOperations()
+    }
+    
+     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        // 2
+        if !decelerate {
+//            loadImagesForOnscreenCells()
+            resumeAllOperations()
+        }
+    }
+    
+     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        // 3
+//        loadImagesForOnscreenCells()
+        resumeAllOperations()
+    }
+    
+    func suspendAllOperations () {
+        pendingOperations.downloadQueue.isSuspended = true
+    }
+    
+    func resumeAllOperations () {
+        pendingOperations.downloadQueue.isSuspended = false
+    }
+}
+
+extension FeedVC {
+    
+    func startDownloadForImage(remoteImage: RemoteImage, indexPath: IndexPath){
+        //1
+        if let _ = pendingOperations.downloadsInProgress[indexPath] {
+            return
+        }
+        
+        //2
+        let downloader = ImageDownloader(remoteImage: remoteImage)
+        //3
+        downloader.completionBlock = {
+            if downloader.isCancelled {
+                return
+            }
+            DispatchQueue.main.async{
+                self.pendingOperations.downloadsInProgress.removeValue(forKey: indexPath)
+                self.feedTableView.reloadRows(at: [indexPath], with: .fade)
+            }
+        }
+        //4
+        pendingOperations.downloadsInProgress[indexPath] = downloader
+        //5
+        pendingOperations.downloadQueue.addOperation(downloader)
+    }
+    
+}
+
+

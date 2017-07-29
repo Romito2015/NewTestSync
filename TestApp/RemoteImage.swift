@@ -8,17 +8,20 @@
 
 import UIKit
 
-enum DownloadState {
+public enum DownloadState {
     case New, Downloaded, Failed
 }
 
-class PhotoRecord {
+public class RemoteImage {
     let url:NSURL
     var state = DownloadState.New
-    var image = UIImage(named: "Placeholder")
+    var image: UIImage?
     
-    init(name:String, url:NSURL) {
-        self.name = name
+    init(url:NSURL, placeholder: String) {
         self.url = url
+        let img = UIImage(named: placeholder) 
+            self.image = img
+        
+        
     }
 }

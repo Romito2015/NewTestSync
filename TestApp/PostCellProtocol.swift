@@ -7,3 +7,7 @@
 //
 
 import Foundation
+
+protocol PostCellProtocol {
+    func configureCell(withPost post: Post)
+}
