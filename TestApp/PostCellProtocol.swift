@@ -6,8 +6,10 @@
 //  Copyright © 2017 Roma Chopovenko. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 protocol PostCellProtocol {
+    weak var mainImageView: UIImageView! {get}
+    
     func configureCell(withPost post: Post)
 }

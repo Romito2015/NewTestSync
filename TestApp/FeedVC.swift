@@ -11,7 +11,14 @@ import UIKit
 class FeedVC: UIViewController {
     
     var dataSource: [Post] = []
-    let pendingOperations = PendingOperations()
+//    let pendingOperations = PendingOperations()
+    lazy var downloadQueue: OperationQueue = {
+        var queue = OperationQueue()
+        queue.name = "Image download queue"
+        queue.maxConcurrentOperationCount = 1
+        return queue
+    }()
+    
     
 
     @IBOutlet weak var feedTableView: UITableView!
@@ -90,10 +97,20 @@ extension FeedVC: UITableViewDelegate {
         let post = self.dataSource[indexPath.row]
         if let cell = cell as? PostCellProtocol {
             cell.configureCell(withPost: post)
-            if (!tableView.isDragging && !tableView.isDecelerating) {
-                guard let remoteImage = post.remoteImage else { return }
-                self.startDownloadForImage(remoteImage: remoteImage, indexPath: indexPath)
-            }
+//            if (!tableView.isDragging && !tableView.isDecelerating) {
+                cell.mainImageView.imageUrl = post.imageURL
+                if post.imageURL == cell.mainImageView.imageUrl {
+                    cell.mainImageView.image = nil
+                    if let im = post.imageURL?.cachedImage {
+                        cell.mainImageView.image = im
+                    } else {
+                        appendOperations(cell.mainImageView, and: post.imageURL!)
+                    }
+                    
+                }
+                //guard let remoteImage = post.remoteImage else { return }
+                //self.startDownloadForImage(remoteImage: remoteImage, indexPath: indexPath)
+//            }
         }
         
     }
@@ -118,40 +135,50 @@ extension FeedVC: UITableViewDelegate {
     }
     
     func suspendAllOperations () {
-        pendingOperations.downloadQueue.isSuspended = true
+        downloadQueue.isSuspended = true
     }
     
     func resumeAllOperations () {
-        pendingOperations.downloadQueue.isSuspended = false
+        downloadQueue.isSuspended = false
     }
 }
 
 extension FeedVC {
-    
-    func startDownloadForImage(remoteImage: RemoteImage, indexPath: IndexPath){
-        //1
-        if let _ = pendingOperations.downloadsInProgress[indexPath] {
-            return
-        }
+    func appendOperations(_ imageView: UIImageView, and url: NSURL) {
+        //imageView.image = nil
+        let operation1 = BlockOperation(block: {
+            let img1 = Downloader.downloadImageWithURL(url)
+            OperationQueue.main.addOperation({
+                imageView.image = img1
+            })
+        })
         
-        //2
-        let downloader = ImageDownloader(remoteImage: remoteImage)
-        //3
-        downloader.completionBlock = {
-            if downloader.isCancelled {
-                return
-            }
-            DispatchQueue.main.async{
-                self.pendingOperations.downloadsInProgress.removeValue(forKey: indexPath)
-                self.feedTableView.reloadRows(at: [indexPath], with: .fade)
-            }
+        operation1.completionBlock = {
+            print("Operation \(imageView.imageUrl) completed, cancelled:\(operation1.isCancelled)")
         }
-        //4
-        pendingOperations.downloadsInProgress[indexPath] = downloader
-        //5
-        pendingOperations.downloadQueue.addOperation(downloader)
+        downloadQueue.addOperation(operation1)
     }
     
+    
+}
+
+class Downloader {
+    
+    class func downloadImageWithURL(_ url: NSURL) -> UIImage? {
+        let data = try? Data(contentsOf: url as URL)
+        
+        if let imageD = url.cachedImage {
+            return imageD
+        }
+        
+        if let data = data, let image = UIImage(data: data) {
+            MyImageCache.sharedCache.setObject(image,
+                                               forKey: url.absoluteString as AnyObject,
+                                               cost: data.count)
+            return image
+        }
+        return nil
+    }
 }
 
 

@@ -12,7 +12,7 @@ class PhotoPostCell: BaseCell {
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var placeholderImageView: UIImageView!
-    @IBOutlet weak var photoImageView: UIImageView!
+    @IBOutlet weak var mainImageView: UIImageView!
     
     @IBOutlet weak var likesCountLabel: UILabel!
     @IBOutlet weak var commentsCountLabel: UILabel!
@@ -22,7 +22,7 @@ class PhotoPostCell: BaseCell {
     
     override func prepareForReuse() {
         titleLabel.text = ""
-        photoImageView.image = nil
+        mainImageView.image = nil
         likesCountLabel.text = ""
         commentsCountLabel.text = ""
         dateLabel.text = ""
@@ -38,6 +38,6 @@ extension PhotoPostCell: PostCellProtocol {
         dateLabel.text = post.dateCreatedString
 //        self.photoImageView.loadImage(withUrl: post.imageURL)
         
-        self.photoImageView.image = post.remoteImage?.image
+        //self.mainImageView.image = post.remoteImage?.image
     }
 }

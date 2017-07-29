@@ -104,9 +104,9 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <connections>
                 <outlet property="avaHolderImageView" destination="JGJ-lK-rBh" id="Rs0-cA-OUO"/>
-                <outlet property="avatarImageView" destination="miB-ax-ZtU" id="m45-2p-PZ7"/>
                 <outlet property="commentsCountLabel" destination="SKU-cY-omC" id="SQj-Yx-DHK"/>
                 <outlet property="dateLabel" destination="qTY-KP-xbq" id="nIF-y4-wyv"/>
+                <outlet property="mainImageView" destination="miB-ax-ZtU" id="etF-JZ-BAo"/>
                 <outlet property="messageLabel" destination="05A-ok-Of0" id="WPk-Vg-qHY"/>
                 <outlet property="titleLabel" destination="ONY-KO-gNx" id="f5F-aN-HCw"/>
             </connections>

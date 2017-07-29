@@ -12,7 +12,7 @@ class MessagePostCell: BaseCell {
 
     @IBOutlet weak var avaHolderImageView: UIImageView!
     
-    @IBOutlet weak var avatarImageView: UIImageView!
+    @IBOutlet weak var mainImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var messageLabel: UILabel!
@@ -34,6 +34,6 @@ extension MessagePostCell: PostCellProtocol {
         commentsCountLabel.text = "💬 \(post.commentsCount)"
         dateLabel.text = post.dateCreatedString
 //        self.avatarImageView.loadImage(withUrl: post.imageURL)
-        self.avatarImageView.image = post.remoteImage?.image
+        //self.mainImageView.image = post.remoteImage?.image
     }
 }

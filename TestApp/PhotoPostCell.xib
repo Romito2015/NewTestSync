@@ -34,7 +34,7 @@
                             <constraint firstAttribute="width" secondItem="o38-sg-jqT" secondAttribute="height" multiplier="1:1" id="lxD-eF-2hu"/>
                         </constraints>
                     </imageView>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MNp-Ed-5Ls">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MNp-Ed-5Ls">
                         <rect key="frame" x="0.0" y="37" width="320" height="320"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </imageView>
@@ -94,7 +94,7 @@
                 <outlet property="commentsCountLabel" destination="EVt-Qs-nsm" id="Wxx-9z-wg2"/>
                 <outlet property="dateLabel" destination="6qw-iL-tl7" id="KcX-sP-8Ye"/>
                 <outlet property="likesCountLabel" destination="CuV-Uf-Hdt" id="M1Y-0Y-E6c"/>
-                <outlet property="photoImageView" destination="MNp-Ed-5Ls" id="pRp-IS-gTU"/>
+                <outlet property="mainImageView" destination="MNp-Ed-5Ls" id="yHh-R5-cDm"/>
                 <outlet property="placeholderImageView" destination="o38-sg-jqT" id="SgR-bV-q2Q"/>
                 <outlet property="titleLabel" destination="6io-5Y-5WC" id="TKG-7q-fSl"/>
             </connections>
