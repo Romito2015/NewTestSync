@@ -60,9 +60,12 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="sdafdsa" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="05A-ok-Of0">
-                        <rect key="frame" x="94" y="45" width="210" height="17"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="05A-ok-Of0">
+                        <rect key="frame" x="94" y="45" width="210" height="50.5"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <string key="text">sdafdsa
+q
+q</string>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -88,8 +91,8 @@
                     <constraint firstItem="miB-ax-ZtU" firstAttribute="leading" secondItem="JGJ-lK-rBh" secondAttribute="leading" id="FFS-cM-0JM"/>
                     <constraint firstAttribute="trailing" secondItem="05A-ok-Of0" secondAttribute="trailing" constant="16" id="PAs-sv-EKI"/>
                     <constraint firstItem="SKU-cY-omC" firstAttribute="top" relation="greaterThanOrEqual" secondItem="05A-ok-Of0" secondAttribute="bottom" constant="8" id="Rhb-Ui-2zr"/>
-                    <constraint firstItem="SKU-cY-omC" firstAttribute="top" relation="greaterThanOrEqual" secondItem="JGJ-lK-rBh" secondAttribute="bottom" constant="8" id="UFu-eP-YjU"/>
                     <constraint firstAttribute="bottom" secondItem="SKU-cY-omC" secondAttribute="bottom" constant="16" id="aNG-YR-8Dm"/>
+                    <constraint firstItem="SKU-cY-omC" firstAttribute="top" secondItem="miB-ax-ZtU" secondAttribute="bottom" priority="250" constant="18" id="bbo-u8-zuZ"/>
                     <constraint firstItem="SKU-cY-omC" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="cIF-lt-JSa"/>
                     <constraint firstItem="05A-ok-Of0" firstAttribute="top" secondItem="ONY-KO-gNx" secondAttribute="bottom" constant="8" id="eLR-RT-QuS"/>
                     <constraint firstItem="qTY-KP-xbq" firstAttribute="leading" secondItem="ONY-KO-gNx" secondAttribute="trailing" constant="8" id="fer-Bk-OID"/>

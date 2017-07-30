@@ -36,18 +36,14 @@ class CacheLimitsVC: UIViewController {
     @IBAction func itemsCountValueChanged(_ sender: UISlider) {
         self.setupItemsCountLabel()
         if !sender.isTracking {
-            
             MyImageCache.sharedCache.countLimit = Int(sender.value)
-            print(")_(_)_)*_)*_(**_(*)(")
         }
     }
     
     @IBAction func cacheSizeValueChanged(_ sender: UISlider) {
         self.setupCacheSizeLabel()
         if !sender.isTracking {
-            
             MyImageCache.sharedCache.totalCostLimit = Int(sender.value)*1024*1024
-            print(")_(_)_)*_)*_(**_(*)(")
         }
     }
     

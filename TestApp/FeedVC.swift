@@ -19,19 +19,27 @@ class FeedVC: UIViewController {
     }()
     
     lazy var downloadsInProgress = [NSURL:Operation]()
-    
-    
-    
+    lazy var expandedRows = Set<Int>()
     
     @IBOutlet weak var feedTableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.dataSource = DataManager.retrieveData()
         self.setupTableView()
-        
-        // Do any additional setup after loading the view.
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if self.downloadQueue.isSuspended {
+            self.resumeAllOperations()
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.suspendAllOperations()    }
     
     func setupTableView() {
         self.feedTableView.estimatedRowHeight = 44
@@ -40,20 +48,6 @@ class FeedVC: UIViewController {
         self.feedTableView.register(MessagePostCell.nib, forCellReuseIdentifier: MessagePostCell.identifier)
         self.feedTableView.register(PhotoPostCell.nib, forCellReuseIdentifier: PhotoPostCell.identifier)
     }
-    
-    
-    
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
 }
 
 extension FeedVC: UITableViewDataSource {
@@ -76,11 +70,11 @@ extension FeedVC: UITableViewDataSource {
         }
     }
     
-    
-    
     func messagePostCell(withPost post: Post, at indexPath: IndexPath) -> MessagePostCell {
         
         if let cell = feedTableView.dequeueReusableCell(withIdentifier: MessagePostCell.identifier,                                                                         for: indexPath) as? MessagePostCell{
+            cell.isExpanded = self.expandedRows.contains(indexPath.row)
+            cell.messageLabel.text = post.message
             return cell
         }
         return MessagePostCell()
@@ -162,17 +156,18 @@ extension FeedVC: UITableViewDelegate {
             }
             
             //2
-            let allPendingOperations: Set<NSURL> = Set(downloadsInProgress.keys)
+            let allPendingOperations = downloadsInProgress.keys
             
             //3
-            var toBeCancelled = allPendingOperations
-            let arryOfVisibleUrls = arryOfVisibleData.map{$0.0}
-            let visibleURLsSet: Set<NSURL> = Set(arryOfVisibleUrls)
-            toBeCancelled.subtract(arryOfVisibleUrls)
+
+            let arryOfVisibleUrls = arryOfVisibleData.map{$0.url}
+
+            let toBeCancelled = allPendingOperations.filter { !arryOfVisibleUrls.contains($0)}
+//            toBeCancelled.subtract(arryOfVisibleUrls)
             
             //4
-            var toBeStarted = visibleURLsSet
-            toBeStarted.subtract(allPendingOperations)
+            //var toBeStarted = visibleURLsSet
+            let toBeStarted = arryOfVisibleUrls.filter{!arryOfVisibleUrls.contains($0)}
             
             // 5
             for urlKey in toBeCancelled {
@@ -194,6 +189,27 @@ extension FeedVC: UITableViewDelegate {
             }
         }
     }
+    
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) as? MessagePostCell
+            
+            else { return }
+        
+        switch cell.isExpanded {
+            
+        case true:
+            self.expandedRows.remove(indexPath.row)
+        case false:
+            self.expandedRows.insert(indexPath.row)
+        }
+        
+        cell.isExpanded = !cell.isExpanded
+        
+        self.feedTableView.beginUpdates()
+        self.feedTableView.endUpdates()
+    }
+    
 }
 
 extension FeedVC {
@@ -211,8 +227,8 @@ extension FeedVC {
             })
         })
         
-        imageDownloadOperation.completionBlock = {
-            print("Operation \(String(describing: url.path)) completed, cancelled:\(imageDownloadOperation.isCancelled)")
+        imageDownloadOperation.completionBlock = { [weak imageDownloadOperation] in
+            print("Operation \(String(describing: url.path)) completed, cancelled:\(imageDownloadOperation?.isCancelled)")
         }
         self.downloadsInProgress[url] = imageDownloadOperation
         self.downloadQueue.addOperation(imageDownloadOperation)
