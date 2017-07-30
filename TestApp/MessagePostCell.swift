@@ -33,6 +33,7 @@ extension MessagePostCell: PostCellProtocol {
         titleLabel.text = post.userName
         commentsCountLabel.text = "💬 \(post.commentsCount)"
         dateLabel.text = post.dateCreatedString
+        self.mainImageView.imageUrl = post.imageURL
 //        self.avatarImageView.loadImage(withUrl: post.imageURL)
         //self.mainImageView.image = post.remoteImage?.image
     }

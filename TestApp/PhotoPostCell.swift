@@ -36,6 +36,7 @@ extension PhotoPostCell: PostCellProtocol {
         likesCountLabel.text = "♥️ \(post.likesCount ?? 0)"
         commentsCountLabel.text = "💬 \(post.commentsCount)"
         dateLabel.text = post.dateCreatedString
+        self.mainImageView.imageUrl = post.imageURL
 //        self.photoImageView.loadImage(withUrl: post.imageURL)
         
         //self.mainImageView.image = post.remoteImage?.image

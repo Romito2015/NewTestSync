@@ -18,6 +18,8 @@ class FeedVC: UIViewController {
         queue.maxConcurrentOperationCount = 1
         return queue
     }()
+    var listOfLinks: Set<NSURL> = Set()
+    
     
     
 
@@ -97,22 +99,26 @@ extension FeedVC: UITableViewDelegate {
         let post = self.dataSource[indexPath.row]
         if let cell = cell as? PostCellProtocol {
             cell.configureCell(withPost: post)
-//            if (!tableView.isDragging && !tableView.isDecelerating) {
-                cell.mainImageView.imageUrl = post.imageURL
-                if post.imageURL == cell.mainImageView.imageUrl {
-                    cell.mainImageView.image = nil
-                    if let im = post.imageURL?.cachedImage {
-                        cell.mainImageView.image = im
-                    } else {
-                        appendOperations(cell.mainImageView, and: post.imageURL!)
-                    }
-                    
-                }
-                //guard let remoteImage = post.remoteImage else { return }
-                //self.startDownloadForImage(remoteImage: remoteImage, indexPath: indexPath)
-//            }
+            //if (!tableView.isDragging && !tableView.isDecelerating) {
+                self.loadImage(imageView: cell.mainImageView, post: post)
+            //}
         }
-        
+    }
+    
+    func loadImage(imageView: UIImageView, post:Post) {
+        guard let postUrl = post.imageURL else { return }
+        guard let imageViewUrl = imageView.imageUrl else { return }
+        if postUrl == imageViewUrl {
+            if let cachedImage = postUrl.cachedImage {
+                imageView.image = cachedImage
+            } else {
+                imageView.image = nil
+                if !self.listOfLinks.contains(postUrl) {
+                    self.listOfLinks.insert(postUrl)
+                    appendOperations(imageView, and: postUrl)
+                }
+            }
+        }
     }
     
      func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -145,16 +151,17 @@ extension FeedVC: UITableViewDelegate {
 
 extension FeedVC {
     func appendOperations(_ imageView: UIImageView, and url: NSURL) {
-        //imageView.image = nil
         let operation1 = BlockOperation(block: {
             let img1 = Downloader.downloadImageWithURL(url)
             OperationQueue.main.addOperation({
-                imageView.image = img1
+                if imageView.imageUrl == url {
+                    imageView.image = img1
+                }
             })
         })
         
         operation1.completionBlock = {
-            print("Operation \(imageView.imageUrl) completed, cancelled:\(operation1.isCancelled)")
+            print("Operation \(String(describing: url.path)) completed, cancelled:\(operation1.isCancelled)")
         }
         downloadQueue.addOperation(operation1)
     }
@@ -175,9 +182,12 @@ class Downloader {
             MyImageCache.sharedCache.setObject(image,
                                                forKey: url.absoluteString as AnyObject,
                                                cost: data.count)
+            print("✅ Download Completed: \(String(describing: url.path))")
             return image
+        } else {
+            print("❌ Download failed: \(String(describing: url.path))")
+            return #imageLiteral(resourceName: "downloadFail")
         }
-        return nil
     }
 }
 
