@@ -26,6 +26,7 @@ class FeedVC: UIViewController {
     @IBOutlet weak var feedTableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.dataSource = DataManager.retrieveData()
         self.setupTableView()
         
@@ -111,6 +112,7 @@ extension FeedVC: UITableViewDelegate {
         if postUrl == imageViewUrl {
             if let cachedImage = postUrl.cachedImage {
                 imageView.image = cachedImage
+                print("FROM CACHE!!!")
             } else {
                 imageView.image = nil
                 appendOperations(imageView, and: postUrl)

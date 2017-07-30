@@ -13,8 +13,8 @@ class MyImageCache {
     static var sharedCache: NSCache<AnyObject, AnyObject> = {
         let cache = NSCache<AnyObject, AnyObject>()
         cache.name = "MyImageCache"
-        cache.countLimit = 50 // Max 20 images in memory.
-        cache.totalCostLimit = 100*1024*1024 // Max 10MB used.
+        cache.countLimit = 50
+        cache.totalCostLimit = 100*1024*1024
         return cache
         }()
 }

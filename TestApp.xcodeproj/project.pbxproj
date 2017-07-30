@@ -29,6 +29,7 @@
 		C9A0C6C61F2CD8BC00F6878C /* PendingOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0C6C51F2CD8BB00F6878C /* PendingOperations.swift */; };
 		C9A0C6C81F2CDDEB00F6878C /* ImageDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0C6C71F2CDDEB00F6878C /* ImageDownloader.swift */; };
 		C9A0C6CA1F2CDE7500F6878C /* RemoteImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0C6C91F2CDE7500F6878C /* RemoteImage.swift */; };
+		C9A0C6CC1F2E39CD00F6878C /* CacheLimitsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0C6CB1F2E39CD00F6878C /* CacheLimitsVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,7 @@
 		C9A0C6C51F2CD8BB00F6878C /* PendingOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PendingOperations.swift; sourceTree = "<group>"; };
 		C9A0C6C71F2CDDEB00F6878C /* ImageDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDownloader.swift; sourceTree = "<group>"; };
 		C9A0C6C91F2CDE7500F6878C /* RemoteImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteImage.swift; sourceTree = "<group>"; };
+		C9A0C6CB1F2E39CD00F6878C /* CacheLimitsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheLimitsVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +136,7 @@
 			isa = PBXGroup;
 			children = (
 				C9A0C6A11F2B801D00F6878C /* FeedVC.swift */,
+				C9A0C6CB1F2E39CD00F6878C /* CacheLimitsVC.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -274,6 +277,7 @@
 				C9A0C6C41F2CA8BB00F6878C /* DiscardableCachedImage.swift in Sources */,
 				C9A0C6CA1F2CDE7500F6878C /* RemoteImage.swift in Sources */,
 				C9A0C6C81F2CDDEB00F6878C /* ImageDownloader.swift in Sources */,
+				C9A0C6CC1F2E39CD00F6878C /* CacheLimitsVC.swift in Sources */,
 				C9A0C6A21F2B801D00F6878C /* FeedVC.swift in Sources */,
 				C9A0C6B71F2B915D00F6878C /* Date+Format.swift in Sources */,
 				C9A0C6C61F2CD8BC00F6878C /* PendingOperations.swift in Sources */,
@@ -452,6 +456,7 @@
 				C9A0C6991F2B6C3300F6878C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
