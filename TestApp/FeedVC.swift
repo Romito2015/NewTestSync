@@ -11,24 +11,24 @@ import UIKit
 class FeedVC: UIViewController {
     
     var dataSource: [Post] = []
-//    let pendingOperations = PendingOperations()
     lazy var downloadQueue: OperationQueue = {
         var queue = OperationQueue()
         queue.name = "Image download queue"
         queue.maxConcurrentOperationCount = 1
         return queue
     }()
-    var listOfLinks: Set<NSURL> = Set()
+    
+    lazy var downloadsInProgress = [NSURL:Operation]()
     
     
     
-
+    
     @IBOutlet weak var feedTableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
         self.dataSource = DataManager.retrieveData()
         self.setupTableView()
-
+        
         // Do any additional setup after loading the view.
     }
     
@@ -39,20 +39,20 @@ class FeedVC: UIViewController {
         self.feedTableView.register(MessagePostCell.nib, forCellReuseIdentifier: MessagePostCell.identifier)
         self.feedTableView.register(PhotoPostCell.nib, forCellReuseIdentifier: PhotoPostCell.identifier)
     }
-
     
     
-
+    
+    
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }
 
 extension FeedVC: UITableViewDataSource {
@@ -66,7 +66,7 @@ extension FeedVC: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let post = dataSource[indexPath.row] 
+        let post = dataSource[indexPath.row]
         switch post.type {
         case .messagePost:
             return self.messagePostCell(withPost: post, at: indexPath)
@@ -100,7 +100,7 @@ extension FeedVC: UITableViewDelegate {
         if let cell = cell as? PostCellProtocol {
             cell.configureCell(withPost: post)
             //if (!tableView.isDragging && !tableView.isDecelerating) {
-                self.loadImage(imageView: cell.mainImageView, post: post)
+            self.loadImage(imageView: cell.mainImageView, post: post)
             //}
         }
     }
@@ -113,30 +113,28 @@ extension FeedVC: UITableViewDelegate {
                 imageView.image = cachedImage
             } else {
                 imageView.image = nil
-                if !self.listOfLinks.contains(postUrl) {
-                    self.listOfLinks.insert(postUrl)
-                    appendOperations(imageView, and: postUrl)
-                }
+                appendOperations(imageView, and: postUrl)
+                
             }
         }
     }
     
-     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         //1
         suspendAllOperations()
     }
     
-     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         // 2
         if !decelerate {
-//            loadImagesForOnscreenCells()
+            loadImagesForOnscreenCells()
             resumeAllOperations()
         }
     }
     
-     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         // 3
-//        loadImagesForOnscreenCells()
+        loadImagesForOnscreenCells()
         resumeAllOperations()
     }
     
@@ -147,23 +145,75 @@ extension FeedVC: UITableViewDelegate {
     func resumeAllOperations () {
         downloadQueue.isSuspended = false
     }
+    
+    func loadImagesForOnscreenCells () {
+        //1
+        print("**********")
+        if let pathsArray = feedTableView.indexPathsForVisibleRows {
+            
+            
+            let arryOfVisibleData: [(url:NSURL, imageView:UIImageView)] = pathsArray.flatMap { [weak self] in
+                let cell = self?.feedTableView.cellForRow(at: $0)  as? PostCellProtocol
+                guard let url = cell?.mainImageView.imageUrl else {return nil}
+                guard let imV = cell?.mainImageView else { return nil }
+                return (url, imV)
+            }
+            
+            //2
+            let allPendingOperations: Set<NSURL> = Set(downloadsInProgress.keys)
+            
+            //3
+            var toBeCancelled = allPendingOperations
+            let arryOfVisibleUrls = arryOfVisibleData.map{$0.0}
+            let visibleURLsSet: Set<NSURL> = Set(arryOfVisibleUrls)
+            toBeCancelled.subtract(arryOfVisibleUrls)
+            
+            //4
+            var toBeStarted = visibleURLsSet
+            toBeStarted.subtract(allPendingOperations)
+            
+            // 5
+            for urlKey in toBeCancelled {
+                if let pendingDownload = downloadsInProgress[urlKey] {
+                    pendingDownload.cancel()
+                }
+                downloadsInProgress.removeValue(forKey: urlKey)
+                
+            }
+            
+            // 6
+            for urlKey in toBeStarted {
+                let imageViewOptional = arryOfVisibleData.filter{$0.url == urlKey}.map{$0.imageView}.first
+                guard let imageView = imageViewOptional else { return }
+                
+                if (imageView.image != nil) { continue }
+                print("🚀\(urlKey)")
+                self.appendOperations(imageView, and: urlKey)
+            }
+        }
+    }
 }
 
 extension FeedVC {
     func appendOperations(_ imageView: UIImageView, and url: NSURL) {
-        let operation1 = BlockOperation(block: {
+        
+        if self.downloadsInProgress.keys.contains(url) { return }
+        
+        let imageDownloadOperation = BlockOperation(block: {
             let img1 = Downloader.downloadImageWithURL(url)
             OperationQueue.main.addOperation({
                 if imageView.imageUrl == url {
                     imageView.image = img1
+                    self.downloadsInProgress.removeValue(forKey: url)
                 }
             })
         })
         
-        operation1.completionBlock = {
-            print("Operation \(String(describing: url.path)) completed, cancelled:\(operation1.isCancelled)")
+        imageDownloadOperation.completionBlock = {
+            print("Operation \(String(describing: url.path)) completed, cancelled:\(imageDownloadOperation.isCancelled)")
         }
-        downloadQueue.addOperation(operation1)
+        self.downloadsInProgress[url] = imageDownloadOperation
+        self.downloadQueue.addOperation(imageDownloadOperation)
     }
     
     
