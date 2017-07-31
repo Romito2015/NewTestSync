@@ -2,7 +2,7 @@
 //  BaseCell.swift
 //  TestApp
 //
-//  Created by Roma Chopovenko on 7/28/17.
+//  Created by Roma Chopovenko on 7/29/17.
 //  Copyright © 2017 Roma Chopovenko. All rights reserved.
 //
 
@@ -21,12 +21,5 @@ class BaseCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         self.selectionStyle = .none
-        // Initialization code
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-        // Configure the view for the selected state
     }
 }

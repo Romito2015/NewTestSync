@@ -2,7 +2,7 @@
 //  Post.swift
 //  TestApp
 //
-//  Created by Roma Chopovenko on 7/28/17.
+//  Created by Roma Chopovenko on 7/29/17.
 //  Copyright © 2017 Roma Chopovenko. All rights reserved.
 //
 
@@ -25,7 +25,6 @@ public final class Post {
     public let type: PostType
     public let userName: String
     public let imageURL: NSURL?
-    public let remoteImage: RemoteImage?
     
     public let message: String?
     public let commentsCount: Int
@@ -37,15 +36,6 @@ public final class Post {
     public enum PostType: String {
         case photoPost
         case messagePost
-        
-        public var placeholderImageName: String {
-            switch self {
-            case .photoPost:
-                return "avatarHolder"
-            case .messagePost:
-                return "image"
-            }
-        }
     }
     
     public init?(dictionary: [String : Any]) {
@@ -84,11 +74,6 @@ public final class Post {
         }
         
         self.imageURL = imageURL
-        if let imageURL = self.imageURL {
-            self.remoteImage = RemoteImage(url: imageURL, placeholder: self.type.placeholderImageName)
-        } else {
-            self.remoteImage = nil
-        }
         self.dateCreated = dateCreated
         self.dateCreatedString = dateCreated.toString()
         

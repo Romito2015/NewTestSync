@@ -2,7 +2,7 @@
 //  PhotoPostCell.swift
 //  TestApp
 //
-//  Created by Roma Chopovenko on 7/28/17.
+//  Created by Roma Chopovenko on 7/29/17.
 //  Copyright © 2017 Roma Chopovenko. All rights reserved.
 //
 

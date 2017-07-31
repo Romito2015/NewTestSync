@@ -9,41 +9,33 @@
 import UIKit
 
 class CacheLimitsVC: UIViewController {
-
-    @IBOutlet weak var itemsCountLabel: UILabel!
     
+    @IBOutlet weak var itemsCountLabel: UILabel!
     @IBOutlet weak var itemsCountSlider: UISlider!
     
     @IBOutlet weak var cacheSizeLabel: UILabel!
-    
     @IBOutlet weak var cacheSizeSlider: UISlider!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.itemsCountSlider.value = Float(MyImageCache.sharedCache.countLimit)
-        self.cacheSizeSlider.value = Float(MyImageCache.sharedCache.totalCostLimit/(1024*1024))
+        self.itemsCountSlider.value = Float(CustomImageCache.sharedCache.countLimit)
+        self.cacheSizeSlider.value = Float(CustomImageCache.sharedCache.totalCostLimit/(1024*1024))
         self.setupItemsCountLabel()
         self.setupCacheSizeLabel()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     @IBAction func itemsCountValueChanged(_ sender: UISlider) {
         self.setupItemsCountLabel()
         if !sender.isTracking {
-            MyImageCache.sharedCache.countLimit = Int(sender.value)
+            CustomImageCache.sharedCache.countLimit = Int(sender.value)
         }
     }
     
     @IBAction func cacheSizeValueChanged(_ sender: UISlider) {
         self.setupCacheSizeLabel()
         if !sender.isTracking {
-            MyImageCache.sharedCache.totalCostLimit = Int(sender.value)*1024*1024
+            CustomImageCache.sharedCache.totalCostLimit = Int(sender.value)*1024*1024
         }
     }
     
@@ -60,15 +52,4 @@ class CacheLimitsVC: UIViewController {
         self.cacheSizeSlider.value = newValue
         self.cacheSizeLabel.text = "Max chache size, \(Int(newValue))Mb"
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

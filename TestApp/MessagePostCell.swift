@@ -2,14 +2,14 @@
 //  MessagePostCell.swift
 //  TestApp
 //
-//  Created by Roma Chopovenko on 7/28/17.
+//  Created by Roma Chopovenko on 7/29/17.
 //  Copyright © 2017 Roma Chopovenko. All rights reserved.
 //
 
 import UIKit
 
 class MessagePostCell: BaseCell {
-
+    
     @IBOutlet weak var avaHolderImageView: UIImageView!
     
     @IBOutlet weak var mainImageView: UIImageView!
@@ -20,8 +20,7 @@ class MessagePostCell: BaseCell {
     
     var isExpanded:Bool = false
     {
-        didSet
-        {
+        didSet {
             if !isExpanded {
                 self.messageLabel.numberOfLines = 3
                 
@@ -45,7 +44,7 @@ extension MessagePostCell: PostCellProtocol {
         titleLabel.text = post.userName
         commentsCountLabel.text = "💬 \(post.commentsCount)"
         dateLabel.text = post.dateCreatedString
-//        messageLabel.text = post.message
+        //        messageLabel.text = post.message
         
         self.mainImageView.imageUrl = post.imageURL
     }

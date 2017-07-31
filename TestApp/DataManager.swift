@@ -2,7 +2,7 @@
 //  DataManager.swift
 //  TestApp
 //
-//  Created by Roma Chopovenko on 7/28/17.
+//  Created by Roma Chopovenko on 7/29/17.
 //  Copyright © 2017 Roma Chopovenko. All rights reserved.
 //
 
@@ -18,7 +18,4 @@ class DataManager {
         let array = NSArray(contentsOfFile: path) as! [[String:Any]]
         return Post.array(dictArray: array)
     }
-    
-    
-    
 }

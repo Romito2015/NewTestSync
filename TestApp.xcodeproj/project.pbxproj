@@ -24,12 +24,9 @@
 		C9A0C6BC1F2BCCD200F6878C /* BaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0C6BB1F2BCCD200F6878C /* BaseCell.swift */; };
 		C9A0C6BE1F2C693900F6878C /* PostCellProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0C6BD1F2C693900F6878C /* PostCellProtocol.swift */; };
 		C9A0C6C01F2C73F100F6878C /* UIImageView+URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0C6BF1F2C73F100F6878C /* UIImageView+URL.swift */; };
-		C9A0C6C21F2CA84700F6878C /* UIImageView+NSCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0C6C11F2CA84700F6878C /* UIImageView+NSCache.swift */; };
-		C9A0C6C41F2CA8BB00F6878C /* DiscardableCachedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0C6C31F2CA8BB00F6878C /* DiscardableCachedImage.swift */; };
-		C9A0C6C61F2CD8BC00F6878C /* PendingOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0C6C51F2CD8BB00F6878C /* PendingOperations.swift */; };
-		C9A0C6C81F2CDDEB00F6878C /* ImageDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0C6C71F2CDDEB00F6878C /* ImageDownloader.swift */; };
-		C9A0C6CA1F2CDE7500F6878C /* RemoteImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0C6C91F2CDE7500F6878C /* RemoteImage.swift */; };
+		C9A0C6C81F2CDDEB00F6878C /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0C6C71F2CDDEB00F6878C /* DownloadManager.swift */; };
 		C9A0C6CC1F2E39CD00F6878C /* CacheLimitsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0C6CB1F2E39CD00F6878C /* CacheLimitsVC.swift */; };
+		C9A0C6CE1F2F2F3500F6878C /* NSURL+CachedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A0C6CD1F2F2F3500F6878C /* NSURL+CachedImage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,12 +49,9 @@
 		C9A0C6BB1F2BCCD200F6878C /* BaseCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseCell.swift; sourceTree = "<group>"; };
 		C9A0C6BD1F2C693900F6878C /* PostCellProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostCellProtocol.swift; sourceTree = "<group>"; };
 		C9A0C6BF1F2C73F100F6878C /* UIImageView+URL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImageView+URL.swift"; sourceTree = "<group>"; };
-		C9A0C6C11F2CA84700F6878C /* UIImageView+NSCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImageView+NSCache.swift"; sourceTree = "<group>"; };
-		C9A0C6C31F2CA8BB00F6878C /* DiscardableCachedImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscardableCachedImage.swift; sourceTree = "<group>"; };
-		C9A0C6C51F2CD8BB00F6878C /* PendingOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PendingOperations.swift; sourceTree = "<group>"; };
-		C9A0C6C71F2CDDEB00F6878C /* ImageDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDownloader.swift; sourceTree = "<group>"; };
-		C9A0C6C91F2CDE7500F6878C /* RemoteImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteImage.swift; sourceTree = "<group>"; };
+		C9A0C6C71F2CDDEB00F6878C /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		C9A0C6CB1F2E39CD00F6878C /* CacheLimitsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheLimitsVC.swift; sourceTree = "<group>"; };
+		C9A0C6CD1F2F2F3500F6878C /* NSURL+CachedImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURL+CachedImage.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,18 +84,14 @@
 		C9A0C6871F2B6C3300F6878C /* TestApp */ = {
 			isa = PBXGroup;
 			children = (
-				C9A0C6B51F2B90F800F6878C /* Extensions */,
-				C9A0C6B01F2B812000F6878C /* Supporting Files */,
-				C9A0C69F1F2B7FE700F6878C /* Controller */,
-				C9A0C69E1F2B7FDF00F6878C /* View */,
 				C9A0C69D1F2B7FD500F6878C /* Model */,
+				C9A0C69E1F2B7FDF00F6878C /* View */,
+				C9A0C69F1F2B7FE700F6878C /* Controller */,
 				C9A0C69A1F2B7AC000F6878C /* Helpers */,
 				C9A0C6BA1F2B98A900F6878C /* Services */,
-				C9A0C6881F2B6C3300F6878C /* AppDelegate.swift */,
-				C9A0C68C1F2B6C3300F6878C /* Main.storyboard */,
-				C9A0C68F1F2B6C3300F6878C /* Assets.xcassets */,
-				C9A0C6911F2B6C3300F6878C /* LaunchScreen.storyboard */,
-				C9A0C6941F2B6C3300F6878C /* Info.plist */,
+				C9A0C6B51F2B90F800F6878C /* Extensions */,
+				C9A0C6B01F2B812000F6878C /* Supporting Files */,
+				C9A0C6CF1F2F30C900F6878C /* Application */,
 			);
 			path = TestApp;
 			sourceTree = "<group>";
@@ -110,8 +100,6 @@
 			isa = PBXGroup;
 			children = (
 				C9A0C69B1F2B7AE200F6878C /* CustomImageCache.swift */,
-				C9A0C6C11F2CA84700F6878C /* UIImageView+NSCache.swift */,
-				C9A0C6C31F2CA8BB00F6878C /* DiscardableCachedImage.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -183,6 +171,7 @@
 			children = (
 				C9A0C6B61F2B915D00F6878C /* Date+Format.swift */,
 				C9A0C6BF1F2C73F100F6878C /* UIImageView+URL.swift */,
+				C9A0C6CD1F2F2F3500F6878C /* NSURL+CachedImage.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -191,11 +180,21 @@
 			isa = PBXGroup;
 			children = (
 				C9A0C6B81F2B98A400F6878C /* DataManager.swift */,
-				C9A0C6C51F2CD8BB00F6878C /* PendingOperations.swift */,
-				C9A0C6C91F2CDE7500F6878C /* RemoteImage.swift */,
-				C9A0C6C71F2CDDEB00F6878C /* ImageDownloader.swift */,
+				C9A0C6C71F2CDDEB00F6878C /* DownloadManager.swift */,
 			);
 			name = Services;
+			sourceTree = "<group>";
+		};
+		C9A0C6CF1F2F30C900F6878C /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				C9A0C6881F2B6C3300F6878C /* AppDelegate.swift */,
+				C9A0C68C1F2B6C3300F6878C /* Main.storyboard */,
+				C9A0C68F1F2B6C3300F6878C /* Assets.xcassets */,
+				C9A0C6911F2B6C3300F6878C /* LaunchScreen.storyboard */,
+				C9A0C6941F2B6C3300F6878C /* Info.plist */,
+			);
+			name = Application;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -274,20 +273,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C9A0C6C41F2CA8BB00F6878C /* DiscardableCachedImage.swift in Sources */,
-				C9A0C6CA1F2CDE7500F6878C /* RemoteImage.swift in Sources */,
-				C9A0C6C81F2CDDEB00F6878C /* ImageDownloader.swift in Sources */,
+				C9A0C6C81F2CDDEB00F6878C /* DownloadManager.swift in Sources */,
 				C9A0C6CC1F2E39CD00F6878C /* CacheLimitsVC.swift in Sources */,
+				C9A0C6CE1F2F2F3500F6878C /* NSURL+CachedImage.swift in Sources */,
 				C9A0C6A21F2B801D00F6878C /* FeedVC.swift in Sources */,
 				C9A0C6B71F2B915D00F6878C /* Date+Format.swift in Sources */,
-				C9A0C6C61F2CD8BC00F6878C /* PendingOperations.swift in Sources */,
 				C9A0C6AE1F2B810700F6878C /* MessagePostCell.swift in Sources */,
 				C9A0C69C1F2B7AE200F6878C /* CustomImageCache.swift in Sources */,
 				C9A0C6BC1F2BCCD200F6878C /* BaseCell.swift in Sources */,
 				C9A0C6891F2B6C3300F6878C /* AppDelegate.swift in Sources */,
 				C9A0C6B41F2B819B00F6878C /* Post.swift in Sources */,
 				C9A0C6BE1F2C693900F6878C /* PostCellProtocol.swift in Sources */,
-				C9A0C6C21F2CA84700F6878C /* UIImageView+NSCache.swift in Sources */,
 				C9A0C6B91F2B98A400F6878C /* DataManager.swift in Sources */,
 				C9A0C6C01F2C73F100F6878C /* UIImageView+URL.swift in Sources */,
 				C9A0C6A81F2B80AF00F6878C /* PhotoPostCell.swift in Sources */,
